@@ -40,6 +40,8 @@ async function main() {
 
         client.on('StasisStart', async (event, channel) => {
 
+            let onStreamEnd = false;
+
             if (event.channel.name.includes('UnicastRTP')) {
                 return;
             }
@@ -83,13 +85,15 @@ async function main() {
                 });
 
                 bridge.on('dialogFlowEvent', async (data) => {
-                    if (data.intent && data.intent.parameters.fields.foo && data.intent.parameters.fields.foo.stringValue) {
-                        await client.channels.setChannelVar({ channelId: channel.id, variable: 'foo', value: data.intent.parameters.fields.foo.stringValue })
-                    }
-
                     if (data.intent && data.intent.intent && data.intent.intent.endInteraction) {
-                        await client.channels.continueInDialplan({ channelId: channel.id });
+                        onStreamEnd = async () => {
+                          await client.channels.continueInDialplan({ channelId: channel.id });
+                          log.info('Closed connection');
+                        }
+                        log.info('Will close connection on next stream end');
                     }
+                    if (data.frames && data.ended)
+                      onStreamEnd = onStreamEnd && await onStreamEnd() && false;
                 });
 
                 await mqttClient.subscribe(`${config.get('mqtt.topicPrefix')}/${channel.id}/events`);
