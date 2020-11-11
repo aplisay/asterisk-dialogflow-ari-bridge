@@ -71,6 +71,7 @@ async function main() {
                         roomName: data.roomName,
                         port: data.port,
                         callerName: data.callerName,
+                        callerNumber: data.callerNumber,
                         channelId: data.channelId
                     }));
                 });
@@ -80,6 +81,7 @@ async function main() {
                         name: data.roomName,
                         port: data.port,
                         callerName: data.callerName,
+                        callerNumber: data.callerNumber,
                         channelId: data.channelId
                     }));
                 });
