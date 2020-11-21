@@ -33,8 +33,6 @@ async function main() {
 
         const ariConfig = config.get('ari');
 
-        log.info({ ariConfig }, 'ari config');
-
         client = await ariClient.connect(ariConfig.url, ariConfig.username, ariConfig.password);
         log.info('connected to ari websocket');
 
@@ -115,9 +113,18 @@ async function main() {
 
         await client.start(ariConfig.appName);
         log.info('ari started');
+        return;
     } catch (err) {
         throw err;
     }
 };
 
-main();
+function startApp(retry = 1000) {
+    main()
+        .catch(err => {
+            log.error({ err, retry }, 'Startup error');
+            setTimeout(() => startApp(retry + 1000), retry);
+        });
+}
+
+startApp();
