@@ -6,7 +6,9 @@ module.exports = {
     appName: process.env.ARI_APPLICATION
   },
   rtpServer: {
-    host: 'audioserver',
+    // This needs a bit of care as it is the hostname give *to* Asterisk via ARI which tells it where to
+    //  send it's audio. Needs to resolve *in DNS* to the IP address of the audioserver component 
+    host: 'localhost',
     port: 7777,
     format: 'slin16'
   },
