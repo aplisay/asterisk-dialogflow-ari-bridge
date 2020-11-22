@@ -18,7 +18,7 @@ module.exports = {
   },
   asterisk: {
     // If set then Playback the Asterisk sound file specified before bridging to the dialogflow media.
-    // Useful for debug and breaking media stand-offs.
+    // Useful for debug and breaking media stand-offs. Really does seem to be needed
     playback: 'silence/1'
   },
 }
